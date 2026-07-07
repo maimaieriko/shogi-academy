@@ -40,10 +40,13 @@ body{
   min-height:100dvh;
   overscroll-behavior:none;
   user-select:none;
+  -webkit-user-select:none;
 }
 .hidden{ display:none !important; }
 img,canvas,svg{ max-width:100%; }
-button{ font-family:inherit; }
+button{ font-family:inherit; touch-action:manipulation; }
+/* 盤・持ち駒の上ではスクロールを奪わせない（iOSタップ確実化） */
+.sg-grid, .sg-sq, .sg-chip{ touch-action:none; }
 
 /* accessible focus ring */
 button:focus-visible, input:focus-visible, select:focus-visible, .sg-sq:focus-visible{
