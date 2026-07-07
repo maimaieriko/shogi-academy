@@ -42,9 +42,9 @@ const App = (() => {
   function rankName(level){
     const ranks = [
       [1,  {ja:'みならい', en:'Apprentice'}],
-      [3,  {ja:'初級生', en:'Junior student'}],
-      [6,  {ja:'中級生', en:'Student'}],
-      [10, {ja:'上級生', en:'Senior student'}],
+      [3,  {ja:'しょきゅうせい', en:'Junior student'}],
+      [6,  {ja:'ちゅうきゅうせい', en:'Student'}],
+      [10, {ja:'じょうきゅうせい', en:'Senior student'}],
       [15, {ja:'師範代', en:'Assistant master'}],
       [20, {ja:'アカデミーマスター', en:'Academy master'}],
     ];
@@ -183,7 +183,7 @@ const App = (() => {
       av = b.dataset.a;
     });
     m.el.querySelector('#ob-go').onclick = () => {
-      const name = m.el.querySelector('#ob-name').value.trim() || (I18N.lang==='en'?'Player':'見習いさん');
+      const name = m.el.querySelector('#ob-name').value.trim() || (I18N.lang==='en'?'Player':'みならいさん');
       S.name = name; S.avatar = av;
       save();
       m.close();
@@ -526,7 +526,7 @@ const App = (() => {
       save();
     } else if (!bossDown){
       lines.push({ who, text: P(npc.lines.questComplete) });
-      lines.push({ who, text: P({ja:'ボスの扉が開いているよ。じゅんびができたら挑戦してみて！', en:'The boss door is open. Challenge it when you\u2019re ready!'}) });
+      lines.push({ who, text: P({ja:'ボスのとびらがひらいているよ。じゅんびができたらちょうせんしてみて！', en:'The boss door is open. Challenge it when you\u2019re ready!'}) });
     } else {
       lines.push({ who, text: P(npc.lines.allDone) });
       lines.push({ who, text: P(npc.lines.daily) });
@@ -895,7 +895,7 @@ const App = (() => {
       '<div class="concept-chip">📖 ' + t('learned') + '：' + t('concept_' + (pz.concept || 'movement')) + '</div>' +
       '<p class="explain">' + esc(P({ja:pz.ja, en:pz.en})) + '</p>' +
       '<div class="row gap">' +
-        '<button class="btn btn-primary" id="res-next">▶ ' + P({ja:'つぎの問題', en:'Next puzzle'}) + '</button>' +
+        '<button class="btn btn-primary" id="res-next">▶ ' + P({ja:'つぎのもんだい', en:'Next puzzle'}) + '</button>' +
         '<button class="btn" id="res-back">' + t('back') + '</button>' +
       '</div>', { sticky:true });
     m.el.querySelector('#res-next').onclick = () => {
@@ -1016,7 +1016,7 @@ const App = (() => {
       '<div class="modal-title">' + title + '</div>' +
       '<div class="result-rewards">' + body + '</div>' +
       '<div class="row gap">' +
-        '<button class="btn btn-primary" id="vs-again">🔁 ' + P({ja:'もう一局', en:'Rematch'}) + '</button>' +
+        '<button class="btn btn-primary" id="vs-again">🔁 ' + P({ja:'もういっきょく', en:'Rematch'}) + '</button>' +
         '<button class="btn" id="vs-back">' + t('back') + '</button>' +
       '</div>', { sticky:true });
     m.el.querySelector('#vs-again').onclick = () => { m.close(); startVsAI(lvl); };
@@ -1048,7 +1048,7 @@ const App = (() => {
         '<button class="list-btn" id="btn-review"' + (rp.length ? '' : ' disabled') + '>' +
           '<span class="list-emoji">🔁</span>' +
           '<span class="list-info"><b>' + t('cat_review') + '</b>' +
-            '<span class="small">' + rp.length + P({ja:'問', en:' puzzles'}) + '</span></span>' +
+            '<span class="small">' + rp.length + P({ja:'もん', en:' puzzles'}) + '</span></span>' +
           '<span class="list-go">▶</span></button>' +
         '<div class="card" style="margin-top:14px"><b>⚔️ ' + t('vsAI') + '</b>' +
           '<div class="small">' + t('aiLevel') + '</div>' +
@@ -1080,27 +1080,27 @@ const App = (() => {
     const solveTiers = [[1,'🌱'],[10,'🌿'],[25,'🌳'],[50,'🏵️'],[100,'🌟']];
     for (const [n, ic] of solveTiers) ACH.push({
       id:'solve'+n, icon:ic,
-      name:{ja:'パズル'+n+'問クリア', en:'Solve '+n+' puzzles'},
+      name:{ja:'パズルを'+n+'もんクリア', en:'Solve '+n+' puzzles'},
       cond:()=>S.stats.correct>=n });
     for (const [n, ic] of [[5,'⚔️'],[15,'🗡️']]) ACH.push({
       id:'mate1_'+n, icon:ic,
-      name:{ja:'1手詰め'+n+'問', en:n+' mates in one'},
+      name:{ja:'1手詰めを'+n+'もん', en:n+' mates in one'},
       cond:()=>catCount('mate1')>=n });
-    ACH.push({ id:'mate3_3', icon:'🐲', name:{ja:'3手詰め3問', en:'3 mates in three'}, cond:()=>catCount('mate3')>=3 });
-    ACH.push({ id:'cap10', icon:'🎯', name:{ja:'駒取り10問', en:'10 capture drills'}, cond:()=>catCount('capture')>=10 });
-    ACH.push({ id:'move10', icon:'🚶', name:{ja:'動きレッスン10問', en:'10 movement lessons'}, cond:()=>catCount('move')>=10 });
+    ACH.push({ id:'mate3_3', icon:'🐲', name:{ja:'3手詰めを3もん', en:'3 mates in three'}, cond:()=>catCount('mate3')>=3 });
+    ACH.push({ id:'cap10', icon:'🎯', name:{ja:'駒とりを10もん', en:'10 capture drills'}, cond:()=>catCount('capture')>=10 });
+    ACH.push({ id:'move10', icon:'🚶', name:{ja:'うごきレッスンを10もん', en:'10 movement lessons'}, cond:()=>catCount('move')>=10 });
     for (const [n, ic] of [[10,'🧠'],[30,'🎓']]) ACH.push({
       id:'nohint'+n, icon:ic,
-      name:{ja:'ノーヒント'+n+'回', en:n+' no-hint solves'},
+      name:{ja:'ノーヒント'+n+'かい', en:n+' no-hint solves'},
       cond:()=>(S.stats.noHint||0)>=n });
-    ACH.push({ id:'ft10', icon:'🎯', name:{ja:'一発クリア10回', en:'10 first-try solves'}, cond:()=>(S.stats.firstTry||0)>=10 });
+    ACH.push({ id:'ft10', icon:'🎯', name:{ja:'いっぱつクリア10かい', en:'10 first-try solves'}, cond:()=>(S.stats.firstTry||0)>=10 });
     for (const [n, ic] of [[5,'🔥'],[10,'🌋'],[20,'☄️']]) ACH.push({
       id:'streak'+n, icon:ic,
-      name:{ja:n+'連続正解', en:n+'-solve streak'},
+      name:{ja:n+'れんぞくせいかい', en:n+'-solve streak'},
       cond:()=>S.stats.bestStreak>=n });
     for (const [n, ic] of [[3,'📅'],[7,'🗓️'],[14,'⏳'],[30,'🏆']]) ACH.push({
       id:'login'+n, icon:ic,
-      name:{ja:'連続ログイン'+n+'日', en:n+'-day login streak'},
+      name:{ja:'れんぞくログイン'+n+'にち', en:n+'-day login streak'},
       cond:()=>S.daily.loginStreak>=n });
     for (const a of World.AREAS) ACH.push({
       id:'boss_'+a.boss.id, icon:a.boss.emoji,
@@ -1110,28 +1110,28 @@ const App = (() => {
       cond:()=>World.AREAS.every(a=>S.bossBeaten[a.boss.id]) });
     for (const [n, ic] of [[4,'✨'],[8,'💫'],[16,'🌠']]) ACH.push({
       id:'stars'+n, icon:ic,
-      name:{ja:'かくれスター'+n+'個', en:n+' hidden stars'},
+      name:{ja:'かくれスター'+n+'こ', en:n+' hidden stars'},
       cond:()=>S.collect.stars.length>=n });
     for (const [n, ic] of [[4,'⚙️'],[8,'🔩']]) ACH.push({
       id:'gears'+n, icon:ic,
-      name:{ja:'歯車'+n+'個', en:n+' gears'},
+      name:{ja:'はぐるま'+n+'こ', en:n+' gears'},
       cond:()=>S.collect.gears.length>=n });
     for (const [n, ic] of [[4,'📜'],[8,'🏛️']]) ACH.push({
       id:'scrolls'+n, icon:ic,
-      name:{ja:'巻物'+n+'本', en:n+' scrolls'},
+      name:{ja:'まきもの'+n+'ほん', en:n+' scrolls'},
       cond:()=>S.collect.scrolls.length>=n });
     for (const [n, ic] of [[5,'🎈'],[10,'🎖️'],[20,'💎']]) ACH.push({
       id:'lv'+n, icon:ic,
-      name:{ja:'レベル'+n+'到達', en:'Reach level '+n},
+      name:{ja:'レベル'+n+'とうたつ', en:'Reach level '+n},
       cond:()=>levelInfo().level>=n });
     for (const l of [1,3,5,7]) ACH.push({
       id:'aiwin'+l, icon:'⚔️',
-      name:{ja:'AI Lv.'+l+'に勝利', en:'Beat AI level '+l},
+      name:{ja:'AI Lv.'+l+'にしょうり', en:'Beat AI level '+l},
       cond:()=>(S.stats.aiWins[l]||0)>=1 });
-    ACH.push({ id:'talk10', icon:'💬', name:{ja:'なかまと10回お話', en:'Chat with friends 10 times'}, cond:()=>(S.stats.talks||0)>=10 });
+    ACH.push({ id:'talk10', icon:'💬', name:{ja:'なかまと10かいおはなし', en:'Chat with friends 10 times'}, cond:()=>(S.stats.talks||0)>=10 });
     for (const [n, ic] of [[5,'📆'],[20,'🌞']]) ACH.push({
       id:'daily'+n, icon:ic,
-      name:{ja:'デイリー'+n+'回達成', en:n+' daily challenges'},
+      name:{ja:'デイリー'+n+'かいたっせい', en:n+' daily challenges'},
       cond:()=>(S.stats.dailyCount||0)>=n });
     function catCount(cat){
       let n = 0;
@@ -1302,7 +1302,7 @@ const App = (() => {
           '<div class="stat-grid">' +
             '<div class="stat"><span>' + t('solvedCount') + '</span><b>' + S.stats.correct + '</b></div>' +
             '<div class="stat"><span>' + t('accuracy') + '</span><b>' + acc + '%</b></div>' +
-            '<div class="stat"><span>' + t('avgTime') + '</span><b>' + avgT + P({ja:'秒', en:'s'}) + '</b></div>' +
+            '<div class="stat"><span>' + t('avgTime') + '</span><b>' + avgT + P({ja:'びょう', en:'s'}) + '</b></div>' +
             '<div class="stat"><span>' + t('curStreak') + '</span><b>🔥' + S.stats.streak + '</b></div>' +
             '<div class="stat"><span>' + t('bestStreak') + '</span><b>' + S.stats.bestStreak + '</b></div>' +
             '<div class="stat"><span>' + t('bosses') + '</span><b>' + Object.keys(S.bossBeaten).length + '/8</b></div>' +

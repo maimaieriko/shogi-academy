@@ -23,38 +23,38 @@ const Puzzles = (() => {
 
   /* ============ MOVEMENT LESSONS (how each piece moves) ============ */
   const MV = [
-    ['P', 'P44', [3,4], '歩は前に1マスだけ進めるよ。', 'The pawn moves one square straight forward.'],
-    ['L', 'L64', [3,4], '香車はまっすぐ前へ、何マスでも走れる！', 'The lance slides any distance straight forward.'],
-    ['N', 'N44', [2,3], '桂馬はななめ前へジャンプ！駒を飛びこえられる唯一の駒だよ。', 'The knight jumps two forward and one sideways — the only piece that can leap!'],
-    ['S', 'S44', [3,3], '銀は前とななめに進めるよ。横と真後ろには行けないんだ。', 'The silver moves forward and diagonally, but never sideways or straight back.'],
-    ['G', 'G44', [3,4], '金は前・ななめ前・横・後ろに1マス。ななめ後ろだけ行けないよ。', 'The gold moves one square any direction except diagonally backward.'],
-    ['K', 'K44', [4,5], '王様はどの方向にも1マス動けるよ。', 'The king moves one square in any direction.'],
-    ['B', 'B44', [1,1], '角はななめに何マスでも走れる！', 'The bishop slides any distance diagonally.'],
-    ['R', 'R44', [4,0], '飛車はたて・よこに何マスでも走れる！最強の駒のひとつだよ。', 'The rook slides any distance vertically or horizontally.'],
-    ['+P','+P44',[4,3], '「と金」は金と同じ動きになるよ。歩が成るとパワーアップ！', 'A promoted pawn (tokin) moves exactly like a gold!'],
-    ['+S','+S44',[4,5], '成銀も金と同じ動きだよ。', 'A promoted silver moves like a gold.'],
-    ['+N','+N44',[3,3], '成桂も金と同じ動き。ジャンプはできなくなるよ。', 'A promoted knight moves like a gold (no more jumping).'],
-    ['+L','+L44',[4,5], '成香も金と同じ動きだよ。', 'A promoted lance moves like a gold.'],
-    ['+R','+R44',[3,3], '龍は飛車の動きに、ななめ1マスが加わるよ。最強！', 'The dragon moves like a rook plus one square diagonally. The strongest piece!'],
-    ['+B','+B44',[3,4], '馬は角の動きに、たて・よこ1マスが加わるよ。', 'The horse moves like a bishop plus one square orthogonally.'],
+    ['P', 'P44', [3,4], '歩はまえに1マスだけすすめるよ。', 'The pawn moves one square straight forward.'],
+    ['L', 'L64', [3,4], '香車はまっすぐまえへ、なんマスでもはしれる！', 'The lance slides any distance straight forward.'],
+    ['N', 'N44', [2,3], '桂馬はななめまえへジャンプ！駒をとびこえられるゆいいつの駒だよ。', 'The knight jumps two forward and one sideways — the only piece that can leap!'],
+    ['S', 'S44', [3,3], '銀はまえとななめにすすめるよ。よことまうしろにはいけないんだ。', 'The silver moves forward and diagonally, but never sideways or straight back.'],
+    ['G', 'G44', [3,4], '金はまえ・ななめまえ・よこ・うしろに1マス。ななめうしろだけいけないよ。', 'The gold moves one square any direction except diagonally backward.'],
+    ['K', 'K44', [4,5], '王様はどのほうこうにも1マスうごけるよ。', 'The king moves one square in any direction.'],
+    ['B', 'B44', [1,1], '角はななめになんマスでもはしれる！', 'The bishop slides any distance diagonally.'],
+    ['R', 'R44', [4,0], '飛車はたて・よこになんマスでもはしれる！さいきょうの駒のひとつだよ。', 'The rook slides any distance vertically or horizontally.'],
+    ['+P','+P44',[4,3], '「と金」は金とおなじうごきになるよ。歩が成るとパワーアップ！', 'A promoted pawn (tokin) moves exactly like a gold!'],
+    ['+S','+S44',[4,5], '成銀も金とおなじうごきだよ。', 'A promoted silver moves like a gold.'],
+    ['+N','+N44',[3,3], '成桂も金とおなじうごき。ジャンプはできなくなるよ。', 'A promoted knight moves like a gold (no more jumping).'],
+    ['+L','+L44',[4,5], '成香も金とおなじうごきだよ。', 'A promoted lance moves like a gold.'],
+    ['+R','+R44',[3,3], '龍は飛車のうごきに、ななめ1マスがくわわるよ。さいきょう！', 'The dragon moves like a rook plus one square diagonally. The strongest piece!'],
+    ['+B','+B44',[3,4], '馬は角のうごきに、たて・よこ1マスがくわわるよ。', 'The horse moves like a bishop plus one square orthogonally.'],
   ];
   for (const [name, tok, tgt, ja, en] of MV){
     add('move', 1, tok, '', '', {kind:'target', src:[+tok.slice(-2)[0], +tok.slice(-1)], target:tgt},
       {piece:[+tok.slice(-2)[0], +tok.slice(-1)], dests:[tgt]},
-      ja + ' ★のマスへ動かそう！', en + ' Move it to the ★ square!', 'movement');
+      ja + ' ★のマスへうごかそう！', en + ' Move it to the ★ square!', 'movement');
   }
 
   /* ============ CAPTURE LESSONS ============ */
   const CP = [
-    ['R44 p47', [4,4],[4,7], '飛車で歩を取ろう！取った駒は自分の持ち駒になるよ。', 'Capture the pawn with your rook! Captured pieces join your hand.'],
-    ['B44 p11', [4,4],[1,1], '角のななめの力で歩をキャッチ！', 'Catch the pawn on the long diagonal!'],
-    ['G44 p34', [4,4],[3,4], '金で前の歩を取ろう。', 'Take the pawn in front with your gold.'],
-    ['S44 p33', [4,4],[3,3], '銀のななめ攻撃で歩を取ろう。', 'Use the silver\u2019s diagonal to capture the pawn.'],
-    ['N44 p25', [4,4],[2,5], '桂馬ジャンプで歩を取ろう！', 'Jump with the knight and capture the pawn!'],
-    ['L64 p34', [6,4],[3,4], '香車でまっすぐ突撃！', 'Charge straight ahead with the lance!'],
-    ['P34 p24', [3,4],[2,4], '歩でも駒は取れるよ。前の歩をパクリ！', 'Even a pawn can capture! Take the enemy pawn.'],
-    ['+R44 p55', [4,4],[5,5], '龍はななめ1マスにも動ける。歩を取ろう！', 'The dragon can step diagonally too. Capture the pawn!'],
-    ['K44 p35', [4,4],[3,5], '王様も駒を取れるよ。でも危ないときはやめようね。', 'The king can capture too — but only when it\u2019s safe!'],
+    ['R44 p47', [4,4],[4,7], '飛車で歩をとろう！とった駒はじぶんの持ち駒になるよ。', 'Capture the pawn with your rook! Captured pieces join your hand.'],
+    ['B44 p11', [4,4],[1,1], '角のななめのちからで歩をキャッチ！', 'Catch the pawn on the long diagonal!'],
+    ['G44 p34', [4,4],[3,4], '金でまえの歩をとろう。', 'Take the pawn in front with your gold.'],
+    ['S44 p33', [4,4],[3,3], '銀のななめこうげきで歩をとろう。', 'Use the silver\u2019s diagonal to capture the pawn.'],
+    ['N44 p25', [4,4],[2,5], '桂馬ジャンプで歩をとろう！', 'Jump with the knight and capture the pawn!'],
+    ['L64 p34', [6,4],[3,4], '香車でまっすぐとつげき！', 'Charge straight ahead with the lance!'],
+    ['P34 p24', [3,4],[2,4], '歩でも駒はとれるよ。まえの歩をパクリ！', 'Even a pawn can capture! Take the enemy pawn.'],
+    ['+R44 p55', [4,4],[5,5], '龍はななめ1マスにもうごける。歩をとろう！', 'The dragon can step diagonally too. Capture the pawn!'],
+    ['K44 p35', [4,4],[3,5], '王様も駒をとれるよ。でもあぶないときはやめようね。', 'The king can capture too — but only when it\u2019s safe!'],
   ];
   for (const [tok, src, tgt, ja, en] of CP){
     add('capture', 1, tok, '', '', {kind:'capture', target:tgt},
@@ -63,23 +63,23 @@ const Puzzles = (() => {
 
   /* ============ MATE IN 1 (verified by engine) ============ */
   const M1 = [
-    ['k04 S23', 'G', 'まわりを金でぴったり包む「頭金」！銀が金を守っているから王様は取れないよ。',
+    ['k04 S23', 'G', '王様のあたまに金をうつ「頭金」！銀が金をまもっているから王様はとれないよ。',
       'The classic "gold on the head" mate! The silver guards the gold, so the king can\u2019t take it.', {piece:null, hand:'G', dests:[[1,4]]}],
-    ['k08 +R12 S26', '', '龍を王様のとなりへ！銀が龍を守っているから逃げ場なし。',
+    ['k08 +R12 S26', '', '龍を王様のとなりへ！銀が龍をまもっているからにげばなし。',
       'Slide the dragon next to the king! The silver protects it — no escape.', {piece:[1,2], dests:[[1,7]]}],
-    ['k04 +P24 R54', '', 'と金は金と同じ。飛車がうしろから支えているよ。',
+    ['k04 +P24 R54', '', 'と金は金とおなじ。飛車がうしろからささえているよ。',
       'The tokin works like a gold, backed up by your rook.', {piece:[2,4], dests:[[1,4]]}],
     ['k08 G28', 'S', '銀を打って、すみっこの王様をつかまえよう！',
       'Drop the silver and trap the king in the corner!', {piece:null, hand:'S', dests:[[1,7]]}],
-    ['k00 p10 N32', 'R', '飛車を打てば、横一列がぜんぶ攻撃ライン！桂馬が逃げ道をふさいでいるよ。',
+    ['k00 p10 N32', 'R', '飛車を打てば、よこ1れつがぜんぶこうげきライン！桂馬がにげみちをふさいでいるよ。',
       'Drop the rook — the whole rank becomes an attack line! The knight blocks the escape.', {piece:null, hand:'R', dests:[[0,4],[0,3],[0,2]]}],
-    ['k04 n13 n14 n15 l03 l05', 'N', '桂馬の王手は合駒ができない！ジャンプ攻撃で詰み。',
+    ['k04 n13 n14 n15 l03 l05', 'N', '桂馬の王手は合駒ができない！ジャンプこうげきで詰み。',
       'A knight check can\u2019t be blocked! Jump in for mate.', {piece:null, hand:'N', dests:[[2,5],[2,3]]}],
-    ['k03 G23 R53', '', '金をすっと前へ。飛車のサポートで完璧な詰み！',
+    ['k03 G23 R53', '', '金をすっとまえへ。飛車のサポートでかんぺきな詰み！',
       'Push the gold forward — with rook support it\u2019s a perfect mate!', {piece:[2,3], dests:[[1,3]]}],
-    ['k00 p10 p22 +B33 L41', '', '馬で歩を取りながら王手！香車が逃げ道を見張っているよ。',
+    ['k00 p10 p22 +B33 L41', '', '馬で歩をとりながら王手！香車がにげみちをみはっているよ。',
       'Capture the pawn with your horse — check! The lance watches the escape route.', {piece:[3,3], dests:[[2,2]]}],
-    ['k08 R13 G28', '', '飛車を成って龍に！横のラインで王様をつかまえよう。',
+    ['k08 R13 G28', '', '飛車を成って龍に！よこのラインで王様をつかまえよう。',
       'Promote your rook to a dragon and catch the king along the rank!', {piece:[1,3], dests:[[0,3],[1,8]]}],
   ];
   let m1diff = 1;
@@ -91,13 +91,13 @@ const Puzzles = (() => {
 
   /* ============ MATE IN 3 (verified by tsume solver) ============ */
   const M3 = [
-    ['k14 P34', 'GG', '金を打って王手→王様が逃げたら、もう一枚の金でフィニッシュ！',
+    ['k14 P34', 'GG', '金を打って王手→王様がにげたら、もう1まいの金でフィニッシュ！',
       'Drop a gold — check! When the king runs, finish with the second gold!'],
-    ['k13 P33', 'GG', '2枚の金の連続攻撃。1枚目はどこに打つ？',
+    ['k13 P33', 'GG', '2まいの金のれんぞくこうげき。1まいめはどこに打つ？',
       'A two-gold combination. Where does the first gold go?'],
-    ['k15 P35', 'GG', '同じ形でも自分で読んでみよう。3手先までイメージ！',
+    ['k15 P35', 'GG', 'おなじかたちでもじぶんでよんでみよう。3手さきまでイメージ！',
       'Read it out yourself — picture all three moves!'],
-    ['k12 P32', 'GG', '端に近い王様も、2枚の金でしっかり捕まえよう。',
+    ['k12 P32', 'GG', 'はしにちかい王様も、2まいの金でしっかりつかまえよう。',
       'Even near the edge, two golds can pin the king down.'],
   ];
   for (const [tok, hand, ja, en] of M3){
@@ -108,58 +108,58 @@ const Puzzles = (() => {
   add('best', 2, 'k04 r06', 'N', '',
     {kind:'exactSet', moves:[{drop:'N', tr:2, tc:5}]},
     {piece:null, hand:'N', dests:[[2,5]]},
-    '桂馬を打つと…王様と飛車を同時に攻撃！これが「両取り（フォーク）」だよ。',
+    '桂馬を打つと…王様と飛車をどうじにこうげき！これが「両取り（フォーク）」だよ。',
     'Drop the knight — it attacks the king AND the rook at once! This is a fork.', 'fork');
   add('best', 2, 'k04 g24 R84', 'P', '',
     {kind:'exactSet', moves:[{drop:'P', tr:3, tc:4}]},
     {piece:null, hand:'P', dests:[[3,4]]},
-    '金は飛車のせいで横に動けない「ピン（釘づけ）」状態。歩を打って攻めよう！',
+    '金は飛車のせいでよこにうごけない「ピン」のじょうたい。歩を打ってせめよう！',
     'The gold is pinned by your rook — it can\u2019t leave the file. Attack it with a pawn!', 'pin');
   add('best', 2, 'k24 r04', 'L', '',
     {kind:'dropLine', drop:'L', col:4, minRow:4},
     {piece:null, hand:'L', dests:[[5,4],[6,4]]},
-    '香車を打てば王手！王様がどいたら、うしろの飛車が取れる。「串刺し（スキュア）」だ！',
+    '香車を打てば王手！王様がどいたら、うしろの飛車がとれる。「串刺し（スキュア）」だ！',
     'Drop the lance — check! When the king moves, the rook behind falls. A skewer!', 'skewer');
   add('best', 3, 'k04 g24 N44 L54', '', '',
     {kind:'exactSet', moves:[{fr:4,fc:4,tr:2,tc:3},{fr:4,fc:4,tr:2,tc:5}]},
     {piece:[4,4], dests:[[2,3],[2,5]]},
-    '桂馬がどくと香車の道が開く！王手をかけながら金もねらう「開き攻撃」！',
+    '桂馬がどくと香車のみちがひらく！王手をかけながら金もねらう「開きこうげき」！',
     'When the knight jumps away, the lance\u2019s path opens! Check the king while eyeing the gold — a discovered attack!', 'discovered');
 
   /* ============ ESCAPE / DEFENSE ============ */
   add('escape', 1, 'K84 r44', '', '',
     {kind:'anyLegal'}, {piece:[8,4]},
-    '王手だ！飛車のたてのラインから王様を逃がそう。',
+    '王手だ！飛車のたてのラインから王様をにがそう。',
     'Check! Move your king off the rook\u2019s file to safety.', 'defense');
   add('escape', 1, 'K80 b35', '', '',
     {kind:'anyLegal'}, {piece:[8,0]},
-    '角のななめ攻撃！ラインの外へ逃げよう。',
+    '角のななめこうげき！ラインのそとへにげよう。',
     'The bishop attacks on the diagonal! Step off the line.', 'defense');
   add('escape', 2, 'K84 r04', 'G', '',
     {kind:'anyLegal'}, {piece:[8,4], hand:'G'},
-    '逃げてもいいし、あいだに金を打つ「合駒」もできるよ！',
+    'にげてもいいし、あいだに金を打つ「合駒」もできるよ！',
     'You can run — or drop your gold in between. That\u2019s called a blocking piece!', 'defense');
 
   /* ============ OPENING LESSONS (from the real starting position) ============ */
   add('opening', 1, 'INITIAL', '', '',
     {kind:'exact', move:{fr:6,fc:7,tr:5,tc:7}},
     {piece:[6,7], dests:[[5,7]]},
-    '飛車の前の歩を突こう！飛車の力を前へ伸ばす第一歩だよ。',
+    '飛車のまえの歩をつこう！飛車のちからをまえへのばすだいいっぽだよ。',
     'Push the pawn in front of your rook — the first step to unleash its power!', 'opening');
   add('opening', 1, 'INITIAL', '', '',
     {kind:'exact', move:{fr:6,fc:2,tr:5,tc:2}},
     {piece:[6,2], dests:[[5,2]]},
-    '角の道を開けよう！ななめのラインが盤のむこうまで通るよ。',
+    '角のみちをあけよう！ななめのラインが盤のむこうまでとおるよ。',
     'Open the bishop\u2019s diagonal! Its line now reaches across the board.', 'opening');
   add('opening', 1, 'INITIAL', '', '',
     {kind:'pieceType', piece:'K'},
     {piece:[8,4]},
-    '王様を安全な場所へ動かし始めよう。「囲い」づくりの第一歩！',
+    '王様をあんぜんなばしょへうごかしはじめよう。「囲い」づくりのだいいっぽ！',
     'Start moving your king toward safety — the first step of building a castle!', 'castle');
   add('opening', 1, 'INITIAL', '', '',
     {kind:'pieceType', piece:'G'},
     {piece:[8,5]},
-    '金は王様のボディーガード。王様のそばに寄せていこう！',
+    '金は王様のボディーガード。王様のそばによせていこう！',
     'Golds are the king\u2019s bodyguards. Bring one closer to the king!', 'castle');
 
   /* ============ VARIANT GENERATION (mirror & shift, engine re-verified) ============ */

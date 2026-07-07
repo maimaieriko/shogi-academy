@@ -24,6 +24,22 @@ class ShogiBoard {
     ShogiBoard._ensurePromoModal();
   }
 
+  /* iOS Safari では指のわずかなブレで click が発火しないことがあるため、
+     pointerup を主イベントにし、click はフォールバック（重複ガード付き）。 */
+  _bindTap(el, fn){
+    let last = 0;
+    const go = e => {
+      const now = Date.now();
+      if (now - last < 400) return;
+      last = now;
+      if (e.cancelable) e.preventDefault();
+      fn();
+    };
+    if (window.PointerEvent) el.addEventListener('pointerup', go);
+    else el.addEventListener('touchend', go, { passive:false });
+    el.addEventListener('click', go);
+  }
+
   /* ---------- DOM construction ---------- */
   _buildDOM(){
     const c = this.container;
@@ -62,7 +78,7 @@ class ShogiBoard {
         sq.type = 'button';
         sq.className = 'sg-sq';
         sq.dataset.r = r; sq.dataset.c = col;
-        sq.addEventListener('click', (e)=>{ e.preventDefault(); this._tapSquare(r, col); });
+        this._bindTap(sq, () => this._tapSquare(r, col));
         this.gridEl.appendChild(sq);
         this.cells[r].push(sq);
       }
@@ -193,7 +209,7 @@ class ShogiBoard {
         chip.innerHTML = '<span class="sg-chip-k">' + Rules.KANJI[tp] + '</span>' +
                          (n>1 ? '<span class="sg-chip-n">' + n + '</span>' : '');
         if (owner === this.opts.playerOwner){
-          chip.addEventListener('click', (e)=>{ e.preventDefault(); this._tapHand(tp); });
+          this._bindTap(chip, () => this._tapHand(tp));
         }
         el.appendChild(chip);
       }
