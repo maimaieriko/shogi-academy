@@ -3,6 +3,14 @@
    legal-move highlighting, drops, the promotion dialog, hint highlights,
    an animated hint arrow, last-move / check indicators, and themes.
 
+   入力設計（iPhone Safari 対応）:
+   - イベントはコンテナに「1回だけ」委譲登録する。マスや持ち駒を
+     いくら再描画してもリスナーは消えず、二重登録も起きない。
+   - pointerup を主イベントとし、その直後に発火する合成 click は
+     抑止する（古い端末は touchend + click フォールバック）。
+   - setState() のたびにロックと選択を必ずリセットするため、
+     問題切替・再対局の直後でも駒タップが必ず反応する。
+
    Usage (from main.js):
      const board = new ShogiBoard(containerEl);
      board.setState(state, { interactive:true, playerOwner:0, onMove(move){...} });
@@ -20,24 +28,11 @@ class ShogiBoard {
     this.sel = null;        // {type:'sq', r, c} | {type:'hand', t}
     this.locked = false;
     this.lastMove = null;
+    this._delegated = false;
+    this._suppressClickUntil = 0;
     this._buildDOM();
+    this._bindDelegatedInput();
     ShogiBoard._ensurePromoModal();
-  }
-
-  /* iOS Safari では指のわずかなブレで click が発火しないことがあるため、
-     pointerup を主イベントにし、click はフォールバック（重複ガード付き）。 */
-  _bindTap(el, fn){
-    let last = 0;
-    const go = e => {
-      const now = Date.now();
-      if (now - last < 400) return;
-      last = now;
-      if (e.cancelable) e.preventDefault();
-      fn();
-    };
-    if (window.PointerEvent) el.addEventListener('pointerup', go);
-    else el.addEventListener('touchend', go, { passive:false });
-    el.addEventListener('click', go);
   }
 
   /* ---------- DOM construction ---------- */
@@ -78,7 +73,6 @@ class ShogiBoard {
         sq.type = 'button';
         sq.className = 'sg-sq';
         sq.dataset.r = r; sq.dataset.c = col;
-        this._bindTap(sq, () => this._tapSquare(r, col));
         this.gridEl.appendChild(sq);
         this.cells[r].push(sq);
       }
@@ -111,6 +105,43 @@ class ShogiBoard {
     this.handSenteEl = document.createElement('div');
     this.handSenteEl.className = 'sg-hand sg-hand-sente';
     c.appendChild(this.handSenteEl);
+  }
+
+  /* ---------- delegated input (bound exactly once, survives re-render) ---------- */
+  _bindDelegatedInput(){
+    if (this._delegated) return;   // 二重登録防止
+    this._delegated = true;
+    const handler = e => this._onTap(e);
+    if (window.PointerEvent){
+      this.container.addEventListener('pointerup', handler);
+    } else {
+      this.container.addEventListener('touchend', handler, { passive:false });
+    }
+    // click はマウス環境と保険用のフォールバック（直前の pointerup/touchend 後は抑止）
+    this.container.addEventListener('click', handler);
+  }
+
+  _onTap(e){
+    if (e.type === 'click'){
+      if (Date.now() < this._suppressClickUntil) return;
+    } else {
+      // pointerup / touchend を処理したら、続く合成 click を抑止
+      this._suppressClickUntil = Date.now() + 500;
+    }
+    const target = e.target;
+    if (!target || !target.closest) return;
+
+    const sq = target.closest('.sg-sq');
+    if (sq && this.gridEl.contains(sq)){
+      if (e.cancelable) e.preventDefault();
+      this._tapSquare(+sq.dataset.r, +sq.dataset.c);
+      return;
+    }
+    const chip = target.closest('.sg-chip');
+    if (chip && this.handSenteEl.contains(chip)){   // 自分の持ち駒トレイのみ操作可
+      if (e.cancelable) e.preventDefault();
+      this._tapHand(chip.dataset.t);
+    }
   }
 
   static _ensurePromoModal(){
@@ -154,6 +185,7 @@ class ShogiBoard {
     if (opts) this.opts = Object.assign({ interactive:false, playerOwner:0, onMove:null }, opts);
     this.legal = state ? Rules.legalMoves(state) : [];
     this.sel = null;
+    this.locked = false;   // 新しい局面 = 必ず操作可能な状態から始める（問題切替後の固まり防止）
     this.render();
   }
 
@@ -208,10 +240,8 @@ class ShogiBoard {
         chip.dataset.t = tp;
         chip.innerHTML = '<span class="sg-chip-k">' + Rules.KANJI[tp] + '</span>' +
                          (n>1 ? '<span class="sg-chip-n">' + n + '</span>' : '');
-        if (owner === this.opts.playerOwner){
-          this._bindTap(chip, () => this._tapHand(tp));
-        }
         el.appendChild(chip);
+        // 個別リスナーは付けない：入力はコンテナ委譲が一括処理する
       }
       if (!any){
         const none = document.createElement('span');
@@ -265,7 +295,7 @@ class ShogiBoard {
     return this.legal.filter(m => m.drop === this.sel.t);
   }
 
-  /* ---------- input ---------- */
+  /* ---------- input logic ---------- */
   _canAct(){
     return this.opts.interactive && !this.locked && this.state &&
            this.state.turn === this.opts.playerOwner;
@@ -291,10 +321,8 @@ class ShogiBoard {
   }
 
   _selectSquare(r, c){
-    const has = this.legal.some(m => !m.drop && m.fr===r && m.fc===c);
     this.sel = { type:'sq', r, c };
     this.render();
-    if (!has){ /* piece with no legal moves stays selectable but shows no dests */ }
   }
 
   _tapHand(tp){
